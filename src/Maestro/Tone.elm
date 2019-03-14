@@ -32,7 +32,6 @@ well as helpers to represent these as numerical values.
 
 import String exposing (toLower)
 
-
 {-| Key represents a Pitch class without adjustment
 -}
 type Key
@@ -73,7 +72,7 @@ while E Flat would be 3, or G Sharp would be 8.
 -}
 toneToIndex : Tone -> Int
 toneToIndex t =
-    (%) ((keyToValue t.key) + (adjustmentToValue t.adjustment)) 12
+    modBy 12 ((keyToValue t.key) + (adjustmentToValue t.adjustment))
 
 
 {-| chromaticTones returns the chromatic scale tones starting at C.
@@ -246,23 +245,23 @@ number of semitones
 -}
 adjustmentFromValue : Int -> Adjustment
 adjustmentFromValue value =
-    case value of
-        (-2) ->
+    case (value, negate value) of
+        (_, 2) ->
             FlatFlat
 
-        (-1) ->
+        (_, 1) ->
             Flat
 
-        0 ->
+        (0, _) ->
             Natural
 
-        1 ->
+        (1, _) ->
             Sharp
 
-        2 ->
+        (2, _) ->
             SharpSharp
 
-        _ ->
+        (_, _) ->
             Natural
 
 

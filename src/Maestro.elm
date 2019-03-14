@@ -20,7 +20,7 @@ octaveOf value =
 -}
 noteOf : Int -> Int
 noteOf value =
-    value % 12
+    modBy 12 value
 
 
 {-|
