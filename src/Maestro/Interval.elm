@@ -1,49 +1,46 @@
-module Maestro.Interval
-    exposing
-        ( Degree(..)
-        , Interval(..)
-        , ionianIntervals
-        , dorianIntervals
-        , phrygianIntervals
-        , lydianIntervals
-        , mixolydianIntervals
-        , aeolianIntervals
-        , locrianIntervals
-        , addInterval
-        , distance
-        , diatonicDegreeOf
-        )
+module Maestro.Interval exposing
+    ( Degree(..), Interval(..)
+    , addInterval, distance, diatonicDegreeOf
+    , ionianIntervals, dorianIntervals, phrygianIntervals, lydianIntervals
+    , mixolydianIntervals, aeolianIntervals, locrianIntervals
+    , fifthIntervals, rootIntervals, seventhIntervals, thirdIntervals
+    )
 
 {-| This module provides types and functions to compute, represent and
 manipulate intervals.
 
+
 # Types
+
 @docs Degree, Interval
 
+
 # Interval calculation
+
 @docs addInterval, distance, diatonicDegreeOf
 
+
 # Scales intervals
-@docs ionianIntervals, dorianIntervals, phrygianIntervals, lydianIntervals,
-      mixolydianIntervals, aeolianIntervals, locrianIntervals
+
+@docs ionianIntervals, dorianIntervals, phrygianIntervals, lydianIntervals
+@docs mixolydianIntervals, aeolianIntervals, locrianIntervals
 
 -}
 
 import Maestro.Note exposing (Note, noteToIndex)
 import Maestro.Tone
     exposing
-        ( Tone
-        , Adjustment(..)
-        , newTone
+        ( Adjustment(..)
+        , Tone
         , adjustmentFromValue
         , adjustmentToValue
         , diatonicKeyFromValue
         , diatonicKeyValue
+        , newTone
         )
 
 
-{-|
--}
+{-| -}
 type Degree
     = First
     | Second
@@ -122,9 +119,9 @@ addInterval note interval =
             adjustmentFromValue (intervalSemitones - startToNewNaturalSemitones)
 
         newOctave =
-            ((noteToIndex newNaturalNote) + (adjustmentToValue adjustment)) // 12
+            (noteToIndex newNaturalNote + adjustmentToValue adjustment) // 12
     in
-        { tone = newTone newNaturalNote.tone.key adjustment, octave = newOctave }
+    { tone = newTone newNaturalNote.tone.key adjustment, octave = newOctave }
 
 
 {-| diatonicDegreeOf will compute the note being the given
@@ -134,17 +131,17 @@ diatonicDegreeOf : Degree -> Note -> Note
 diatonicDegreeOf degree note =
     let
         diatonicKey =
-            diatonicKeyFromValue <| (%) (diatonicKeyValue note.tone.key + degreeToValue degree) 7
+            diatonicKeyFromValue <| modBy 7 (diatonicKeyValue note.tone.key + degreeToValue degree)
 
         octaveShift =
             (//) (diatonicKeyValue note.tone.key + degreeToValue degree) 7
     in
-        case diatonicKey of
-            Just dk ->
-                { tone = newTone dk Natural, octave = note.octave + octaveShift }
+    case diatonicKey of
+        Just dk ->
+            { tone = newTone dk Natural, octave = note.octave + octaveShift }
 
-            Nothing ->
-                note
+        Nothing ->
+            note
 
 
 {-| distance computes the distance in semitones between two notes
@@ -542,3 +539,19 @@ locrianIntervals =
     , MinorSixth
     , MinorSeventh
     ]
+
+
+rootIntervals =
+    [ PerfectUnison ]
+
+
+fifthIntervals =
+    [ PerfectFifth, DiminishedFifth ]
+
+
+thirdIntervals =
+    [ MinorThird, MajorThird ]
+
+
+seventhIntervals =
+    [ MinorSeventh, MajorSeventh, DiminishedSeventh ]

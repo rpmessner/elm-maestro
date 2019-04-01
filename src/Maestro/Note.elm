@@ -31,8 +31,8 @@ type alias Note =
 {-| newNote is a helper function to create a note
 -}
 newNote : Key -> Adjustment -> Octave -> Note
-newNote key adjustment octave =
-    { tone = newTone key adjustment, octave = octave }
+newNote key adjustment oct =
+    { tone = newTone key adjustment, octave = oct }
 
 
 {-| noteToIndex returns the MIDI value of a given note
